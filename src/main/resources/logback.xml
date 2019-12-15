@@ -1,0 +1,70 @@
+<configuration>
+  <include resource="terse-logback/initial.xml"/>
+
+  <if condition='property("local.logback.environment").contains("container")'>
+    <then>
+      <appender name="ROOT_APPENDER" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
+      </appender>
+    </then>
+    <else>
+      <include resource="terse-logback/censor.xml"/>
+      <include resource="terse-logback/exceptions.xml"/>
+
+      <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+          <pattern>${console.encoder.pattern}</pattern>
+        </encoder>
+        <withJansi>${console.withJansi}</withJansi>
+      </appender>
+
+      <appender name="TEXTFILE" class="ch.qos.logback.core.FileAppender">
+        <file>${textfile.location}</file>
+        <append>${textfile.append}</append>
+        <immediateFlush>${textfile.immediateFlush}</immediateFlush>
+        <encoder>
+          <pattern>${textfile.encoder.pattern}</pattern>
+          <outputPatternAsHeader>${textfile.encoder.outputPatternAsHeader}</outputPatternAsHeader>
+        </encoder>
+      </appender>
+
+      <appender name="JSONFILE"  class="ch.qos.logback.core.FileAppender">
+        <file>${jsonfile.location}</file>
+        <append>${jsonfile.append}</append>
+        <immediateFlush>${jsonfile.immediateFlush}</immediateFlush>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
+      </appender>
+
+      <appender name="development" class="com.tersesystems.logback.core.CompositeAppender">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="TEXTFILE"/>
+      </appender>
+
+      <appender name="test" class="com.tersesystems.logback.core.CompositeAppender">
+        <appender-ref ref="TEXTFILE"/>
+      </appender>
+
+      <appender name="production" class="com.tersesystems.logback.core.CompositeAppender">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="JSONFILE"/>
+      </appender>
+
+      <appender name="selector" class="com.tersesystems.logback.core.SelectAppender">
+        <appenderKey>${logback.environment:-development}</appenderKey>
+        <appender-ref ref="development"/>
+        <appender-ref ref="test"/>
+        <appender-ref ref="production"/>
+      </appender>
+
+      <appender name="ROOT_APPENDER" class="com.tersesystems.logback.uniqueid.UniqueIdEventAppender">
+        <appender-ref ref="selector"/>
+      </appender>
+    </else>
+  </if>
+
+  <root level="INFO">
+    <appender-ref ref="ROOT_APPENDER" />
+  </root>
+
+  <include resource="terse-logback/ending.xml" />
+</configuration>
