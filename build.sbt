@@ -32,9 +32,9 @@ lazy val root = (project in file("."))
     // Always use latest tag
     dockerUpdateLatest := true,
 
-    // https://registry.hub.docker.com/r/azul/zulu-openjdk
-    // Remember to use AshScriptPlugin if you are using an alpine based image like zulu-openjdk-alpine
-    dockerBaseImage := "azul/zulu-openjdk:13",
+    // https://hub.docker.com/r/adoptopenjdk/openjdk13
+    // Remember to use AshScriptPlugin if you are using an alpine based image
+    dockerBaseImage := "adoptopenjdk/openjdk13:alpine-slim",
 
     // If you want to publish to a remote docker repository, uncomment the following:
     //dockerRepository := Some("remote-docker-hostname"),
@@ -67,7 +67,7 @@ lazy val root = (project in file("."))
     // https://sbt-native-packager.readthedocs.io/en/stable/archetypes/java_app/customize.html#bashscript-defines
     // Pass through the logback environment -- if dockerEnvVar set one then use that, otherwise default to production.
     bashScriptExtraDefines += """addJava "-Dlocal.logback.environment=${LOGBACK_ENVIRONMENT:-production}"""",
-    bashScriptExtraDefines += """addJava "-Dlog.dir=${LOG_DIR:-${app_home}/../logs}"""",
+      bashScriptExtraDefines += """addJava "-Dlog.dir=${LOG_DIR:-${app_home}/../logs}"""",
 
     javaOptions in Universal ++= Seq(
       "-J-Xmx512m",

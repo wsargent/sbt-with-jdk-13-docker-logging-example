@@ -14,10 +14,10 @@ The first thing you should do is install SDKMAN and jenv, which will let you be 
 
 [jenv](http://www.jenv.be/) is the best way to set different JDKs for different projects.
 
-You can install multiple JDKs and have them available.  Here, we'll use the Azul 13.0.1 image. 
+You can install multiple JDKs and have them available.  Here, we'll use the OpenJDK 13.0.1 image. 
 
 ```
-$ sdk install java 13.0.1-zulu
+$ sdk install java 13.0.1.hs-adpt
 ```
 
 After that, you can see the JDK available in `$HOME/.sdkman/candidates/java/13.0.1-zulu`.
@@ -25,23 +25,22 @@ After that, you can see the JDK available in `$HOME/.sdkman/candidates/java/13.0
 Now that you've got the JDK available, let's tell jenv about it:
 
 ```
-$ jenv add $HOME/.sdkman/candidates/java/13.0.1-zulu
+$ jenv add $HOME/jenv add $HOME/.sdkman/candidates/java/13.0.1.hs-adpt
 ```
 
 And then we'll set it as the default for this project.
 
 ```
-$ cd my-project
 $ jenv local 13.0
 ```
 
 This will create a `.java-version` file in your directory that picks up and points you to the JDK.
 
 ```
-$ java --version
+$ java --version 
 openjdk 13.0.1 2019-10-15
-OpenJDK Runtime Environment Zulu13.28+11-CA (build 13.0.1+10-MTS)
-OpenJDK 64-Bit Server VM Zulu13.28+11-CA (build 13.0.1+10-MTS, mixed mode, sharing)
+OpenJDK Runtime Environment AdoptOpenJDK (build 13.0.1+9)
+OpenJDK 64-Bit Server VM AdoptOpenJDK (build 13.0.1+9, mixed mode, sharing)
 ```
 
 Now you're running JDK 13 for your project.
